@@ -10,6 +10,9 @@ import { AppComponent } from './app.component';
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 
 import { PagesModule } from './pages/pages.module';
+import { AuthModule } from './auth/auth.module';
+
+
 
 
 @NgModule({
@@ -18,14 +21,13 @@ import { PagesModule } from './pages/pages.module';
     NopagefoundComponent,
     
 
-
-
   ],
   imports: [
     RouterModule,//PARA QUE SE PUEDA USAAR EL ROUTER-OULET
     BrowserModule,
     AppRoutingModule,
     PagesModule, // jala las rutas de las paginas
+    AuthModule
     
   ],
   providers: [],

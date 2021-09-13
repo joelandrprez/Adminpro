@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+declare function customInitFunction():void;
 
 @Component({
   selector: 'app-root',
