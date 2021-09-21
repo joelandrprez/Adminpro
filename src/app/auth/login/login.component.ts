@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
                         
                         },(err) => {
                           //si sucede un error
-                          Swal.fire('Error','Valide bien los datos','error');
+                          Swal.fire('Error','Valide bien los datos11','error');
                           localStorage.removeItem('email')
 
                         });

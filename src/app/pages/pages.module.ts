@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
@@ -10,6 +10,7 @@ import { ShareModule } from '../share/share.module';
 import { RouterModule } from '@angular/router';
 import { ComponentsModule } from '../components/components.module';
 import { AccountSettinngsComponent } from './account-settinngs/account-settinngs.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 
 
@@ -19,7 +20,8 @@ import { AccountSettinngsComponent } from './account-settinngs/account-settinngs
     ProgressComponent,
     Grafica1Component,
     PagesComponent,
-    AccountSettinngsComponent
+    AccountSettinngsComponent,
+    PerfilComponent
   ],
   exports:[
     DashboardComponent,
@@ -31,6 +33,7 @@ import { AccountSettinngsComponent } from './account-settinngs/account-settinngs
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     
     ShareModule, // jala los componentes personalizaDOS
     RouterModule,

@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { environment } from '../../environments/environment';
-
-import { RegisterForm } from 'src/app/interface/regiter-form.interface';
-import { LoginForm } from '../interface/login-form.interface';
 import { catchError, map, tap } from 'rxjs/operators'; // guardar en local storage
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+
+
+import { RegisterForm } from 'src/app/interface/regiter-form.interface';
+import { LoginForm } from '../interface/login-form.interface';
+import { Usuario } from '../models/usuario.model';
 
 const base_url = environment.base_url;
 declare var gapi:any;
@@ -17,6 +19,7 @@ declare var gapi:any;
 })
 export class UsuarioService {
   public auth2:any;
+  public usuario?:Usuario;
 
   constructor( private http:HttpClient,
                private router:Router,
@@ -25,6 +28,15 @@ export class UsuarioService {
                  this.googleInit();
 
   }
+
+  get Token():string{
+    return localStorage.getItem('token')||'';
+
+  }
+  get uid():string{
+    return this.usuario?.uid||'';
+  }
+
   logout(){
     localStorage.removeItem('token');
     
@@ -39,17 +51,38 @@ export class UsuarioService {
   }
 
   validarToken(){
+
+
     const token =localStorage.getItem('token')|| '';
     return this.http.get(`${base_url}/login/renew`,{
       headers:{
         'x-token':token
       }
     }).pipe(
-      tap( (res:any) => {
+      map( (res:any) => {
+
+        const { nombre,
+                email,
+                role,
+                google,
+                img, 
+                uid } = res.usuario;
+
+        this.usuario = new Usuario(nombre,email,role,'',img,google,uid);
+
+        
+
         localStorage.setItem('token',res.token)
-      }),map(res => true),catchError(error => of(false))
+        return true;
+
+
+      }),catchError(error => of(false))
     )
   }
+
+
+
+
 
   crearUsuario(formData:RegisterForm){
 
@@ -61,6 +94,25 @@ export class UsuarioService {
                         
                       }))
   }
+
+
+
+  
+
+  actualizarUsuario(data:{email:string,nombre:string,role?:string}){
+
+    data = { ... data , role:this.usuario?.role }
+
+    return this.http.put(`${base_url}/usuarios/${this.uid}`,data,{
+      headers:{
+        'x-token':this.Token
+    }})
+
+  }; 
+
+
+
+
 
 
   googleInit(){
