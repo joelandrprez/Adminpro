@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { catchError, map, tap } from 'rxjs/operators'; // guardar en local storage
+import { catchError, delay, map, tap } from 'rxjs/operators'; // guardar en local storage
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
 import { RegisterForm } from 'src/app/interface/regiter-form.interface';
 import { LoginForm } from '../interface/login-form.interface';
 import { Usuario } from '../models/usuario.model';
+import { CargarUsuario } from '../interface/cargar-usuario.interface';
+import Swal from 'sweetalert2';
+
 
 const base_url = environment.base_url;
 declare var gapi:any;
@@ -23,7 +26,8 @@ export class UsuarioService {
 
   constructor( private http:HttpClient,
                private router:Router,
-               private ngzone:NgZone) { 
+               private ngzone:NgZone,
+               ) { 
 
                  this.googleInit();
 
@@ -35,6 +39,13 @@ export class UsuarioService {
   }
   get uid():string{
     return this.usuario?.uid||'';
+  }
+  get headers(){
+    return {
+      headers:{
+        'x-token':this.Token
+      }
+    }
   }
 
   logout(){
@@ -80,10 +91,6 @@ export class UsuarioService {
     )
   }
 
-
-
-
-
   crearUsuario(formData:RegisterForm){
 
     
@@ -95,25 +102,13 @@ export class UsuarioService {
                       }))
   }
 
-
-
-  
-
   actualizarUsuario(data:{email:string,nombre:string,role?:string}){
 
     data = { ... data , role:this.usuario?.role }
 
-    return this.http.put(`${base_url}/usuarios/${this.uid}`,data,{
-      headers:{
-        'x-token':this.Token
-    }})
+    return this.http.put(`${base_url}/usuarios/${this.uid}`,data,this.headers)
 
   }; 
-
-
-
-
-
 
   googleInit(){
 
@@ -141,6 +136,7 @@ export class UsuarioService {
                      )
 
   }
+
   loginGoogle(token:string){
     return this.http.post(`${base_url}/login/google`,{token})
                     .pipe(
@@ -151,5 +147,50 @@ export class UsuarioService {
                      )
 
   }
+
+  cargarUsuarios( desde:number = 0 ){
+
+    const url = `${base_url}/usuarios?desde=${desde}`;
+    return this.http.get<CargarUsuario>(url,this.headers)
+                .pipe(
+                  delay(300),
+                  map(resp =>{
+                    console.log(resp);
+                    const usuarios = resp.usuarios.map(user => new Usuario(
+                                                                          user.nombre,
+                                                                          user.email,
+                                                                          user.role,
+                                                                          '',
+                                                                          user.img,
+                                                                          user.google,
+                                                                          user.uid))
+                    return {
+                      total:resp.total,
+                      usuarios
+
+                    };
+                  })
+                )
+
+  }
+  EliminarUsuario(usuario:Usuario){
+
+    const url = `${base_url}/usuarios/${usuario.uid}`;
+    
+    return this.http.delete(url,this.headers);
+
+    
+
+  }
+
+  guaradarUsuario(data:Usuario){
+
+
+    return this.http.put(`${base_url}/usuarios/${data.uid}`,data,this.headers)
+
+  }; 
+
+
+
 
 }

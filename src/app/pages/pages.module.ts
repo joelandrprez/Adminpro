@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { ComponentsModule } from '../components/components.module';
 import { AccountSettinngsComponent } from './account-settinngs/account-settinngs.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
 
 
 
@@ -21,7 +22,8 @@ import { PerfilComponent } from './perfil/perfil.component';
     Grafica1Component,
     PagesComponent,
     AccountSettinngsComponent,
-    PerfilComponent
+    PerfilComponent,
+    UsuariosComponent
   ],
   exports:[
     DashboardComponent,
