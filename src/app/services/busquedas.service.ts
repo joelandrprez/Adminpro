@@ -39,7 +39,7 @@ export class BusquedasService {
                                   user.uid))
   }
   
-  buscarm(tipo: 'usuarios' | 'medicos' | 'hospitales',
+  buscarm(tipo: 'usuarios' | 'medicos' | 'hospital',
         termino:string ){
 
     const url = `${base_url}/todo/coleccion/${tipo}/${termino}`;
@@ -53,7 +53,7 @@ export class BusquedasService {
                                 return this.transformarUsuarios(resp.data)
                               case 'medicos':
                                 return this.transformarUsuarios(resp.data)
-                              case 'hospitales':
+                              case 'hospital':
                                 return this.transformarUsuarios(resp.data)
                               default:
                               return [];

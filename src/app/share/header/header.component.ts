@@ -21,7 +21,8 @@ export class HeaderComponent implements OnInit{
                   this.largocorreo = this.usuario?.email.length;
                   this.largonombre = this.usuario?.nombre.length;
 
-                  console.log(this.largocorreo);
+
+
                   
   }
   

@@ -10,7 +10,7 @@ import { RegisterForm } from 'src/app/interface/regiter-form.interface';
 import { LoginForm } from '../interface/login-form.interface';
 import { Usuario } from '../models/usuario.model';
 import { CargarUsuario } from '../interface/cargar-usuario.interface';
-import Swal from 'sweetalert2';
+
 
 
 const base_url = environment.base_url;
